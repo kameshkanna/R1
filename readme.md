@@ -210,52 +210,7 @@ reward = (1 - alpha) * external_reward + alpha * internal_reward
 
 ### Adding New Reward Signals
 
-Modify the `compute_adlf_rewards` function to include additional reward components:
-
-```python
-def compute_adlf_rewards(model_outputs, scores, tokenizer, args):
-    rewards = []
-    for output, score in zip(model_outputs, scores):
-        # External reward
-        external_reward = (score / 5.0) * 2 - 1
-        
-        # Internal reward
-        internal_reward = 0.0
-        components = 0
-        
-        # Add your custom reward component
-        if args.use_my_custom_reward:
-            custom_score = calculate_custom_score(output)
-            internal_reward += custom_score
-            components += 1
-            
-        # Normalize and combine
-        if components > 0:
-            internal_reward /= components
-            
-        combined_reward = (1 - args.adlf_alpha) * external_reward + args.adlf_alpha * internal_reward
-        rewards.append(combined_reward)
-        
-    return torch.tensor(rewards, device=args.device)
-```
-
-### Adding New Command Line Arguments
-
-Extend the `parse_args` function:
-
-```python
-def parse_args():
-    parser = argparse.ArgumentParser()
-    # Existing arguments...
-    
-    # Add new arguments
-    parser.add_argument("--my_new_feature", action="store_true", default=False,
-                        help="Whether to use my new feature")
-    parser.add_argument("--new_parameter", type=float, default=0.5,
-                        help="Value for new parameter")
-                        
-    return parser.parse_args()
-```
+Modify the `compute_adlf_rewards` function to include additional reward components.
 
 ## 🚫 Common Issues and Solutions
 
